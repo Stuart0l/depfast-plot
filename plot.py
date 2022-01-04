@@ -12,8 +12,8 @@ num2exp = {
     0: 'No Slowness',
     1: 'CPU Slowness',
     2: 'CPU Contention',
-    3: 'Disk Slowness',
-    4: 'Disk Contention',
+    # 3: 'Disk Slowness',
+    # 4: 'Disk Contention',
     5: 'Network Slowness',
     6: 'memory Contention'
 }
@@ -35,7 +35,7 @@ metrics = [
 ]
 
 reps = [3, 5]
-typs = ['follower'] #, 'leader']
+typs = ['follower', 'leader']
 
 def load_process_data(protocol, ty, exp, rep):
     loadname = 'result{}_{}.csv'.format(exp, rep)
@@ -56,18 +56,18 @@ def load_process_data(protocol, ty, exp, rep):
 
 
 def plot_figure(all_data, metric, ax, plt_id):
-    labels = ['{} Nodes'.format(r) for r in reps]
-    # labels = typs
+    # labels = ['{} Nodes'.format(r) for r in reps]
+    labels = typs
 
     x = np.arange(len(labels))
-    width = 0.1
+    width = 0.15
 
-    i = -3
+    i = -2
     lines = []
     for n, e in num2exp.items():
         try:
-            slow_res = [all_data['follower'][r][e][metric] for r in reps]
-            # slow_res = [all_data[t][3][e][metric] for t in typs]
+            # slow_res = [all_data['follower'][r][e][metric] for r in reps]
+            slow_res = [all_data[t][3][e][metric] for t in typs]
             lines.append(ax.bar(x + i*width, slow_res, width, label=e))
             i += 1
         except:
@@ -84,7 +84,7 @@ def plot_figure(all_data, metric, ax, plt_id):
 def get_cdf_data(protocol, ty, exp, rep):
     true_name = 'fpga_raft' if protocol == 'raft' else protocol
     filepath = os.path.join(home, 'results', protocol, ty, 'yaml')
-    filename = '{}_{}_exp{}_t1_c200_s{}_trail1-tpca_none-{}_1_1_-1.yml'.format(
+    filename = '{}_{}_exp{}_t12_c1_s{}_trail1-tpca_none-{}_12_1_-1.yml'.format(
         protocol, ty, exp, rep, true_name
     )
     with open(os.path.join(filepath, filename), 'r') as f:
@@ -114,15 +114,15 @@ def plot_cdf(all_cdf, ty, rep, ax, plt_id):
 
     ax.set_ylabel('CDF')
     ax.set_ylim([0, 1])
-    ax.set_xlim([0, 45])
+    ax.set_xlim([0, 15])
     ax.set_xlabel('Latency (ms)')
     # ax.set_xscale('log')
     ax.set_box_aspect(1.2)
-    ax.set_title('{} CDF ({} Nodes)'.format(plt_id, rep), y=-0.35, fontsize=18, fontweight='bold')
+    ax.set_title('{} CDF ({} slow)'.format(plt_id, ty), y=-0.35, fontsize=18, fontweight='bold')
 
 
 if __name__ == '__main__':
-    protocol = 'raft'
+    protocol = 'copilot'
     all_data = {}
     all_cdf = {}
     for t in typs:
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     
     lines = plot_figure(all_data, 0, axes[1], '(b)')
     plot_cdf(all_cdf, 'follower', 3, axes[2], '(c)')
-    plot_cdf(all_cdf, 'follower', 5, axes[3], '(d)')
+    plot_cdf(all_cdf, 'leader', 3, axes[3], '(d)')
 
     fig.legend(lines, labels=num2exp.values(), loc='upper center', ncol=len(num2exp), frameon=False)
     lattput.plot_lattput(protocol, axes[0], '(a)')
