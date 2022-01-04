@@ -28,7 +28,7 @@ def getdata(proto, r):
 	return lat, tput
 
 
-def plot_lattput(proto, ax):
+def plot_lattput(proto, ax, plt_id):
 	for r in rep:
 		lat, tput = getdata(proto, r)
 
@@ -40,3 +40,4 @@ def plot_lattput(proto, ax):
 
 	ax.legend(frameon=False)
 	ax.set_box_aspect(0.6)
+	ax.set_title('{} Throughput-Latency'.format(plt_id), y=-0.35, fontsize=18, fontweight='bold')
