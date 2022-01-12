@@ -15,7 +15,7 @@ num2exp = {
     3: 'Disk Slowness',
     4: 'Disk Contention',
     5: 'Network Slowness',
-    6: 'memory Contention'
+    6: 'Memory Contention'
 }
 
 exp2num = {
@@ -25,7 +25,7 @@ exp2num = {
     'Disk Slowness': 3,
     'Disk Contention': 4,
     'Network Slowness': 5,
-    'memory Contention': 6
+    'Memory Contention': 6
 }
 
 metrics = [
@@ -77,7 +77,7 @@ def plot_figure(all_data, metric, ax, plt_id):
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_box_aspect(0.6)
-    ax.set_title('{} Throughput with slowness'.format(plt_id), y=-0.35, fontsize=18, fontweight='bold')
+    ax.set_title('{} Throughput with slowness'.format(plt_id), y=-0.45, fontsize=18, fontweight='bold')
 
     return lines
 
@@ -117,8 +117,8 @@ def plot_cdf(all_cdf, ty, rep, ax, plt_id):
     ax.set_xlim([0, 45])
     ax.set_xlabel('Latency (ms)')
     # ax.set_xscale('log')
-    ax.set_box_aspect(1.2)
-    ax.set_title('{} CDF ({} Nodes)'.format(plt_id, rep), y=-0.35, fontsize=18, fontweight='bold')
+    ax.set_box_aspect(0.6)
+    ax.set_title('{} CDF ({} Nodes)'.format(plt_id, rep), y=-0.45, fontsize=18, fontweight='bold')
 
 
 if __name__ == '__main__':
@@ -140,9 +140,11 @@ if __name__ == '__main__':
                 cdf = get_cdf_data(protocol, t, exp2num[e], r)
                 all_cdf[t][r][e] = cdf
 
-    plt.rc('font', size=18)
-    fig, axes = plt.subplots(1, 4, figsize=(25,5), gridspec_kw={
-        'width_ratios': [4,4,2,2]
+    print(all_data)
+    plt.rcParams['font.size'] = 18
+    plt.rcParams['font.family'] = 'serif'
+    fig, axes = plt.subplots(1, 4, figsize=(25,4), gridspec_kw={
+        'width_ratios': [1,1,1,1]
     })
     
     lines = plot_figure(all_data, 0, axes[1], '(b)')
@@ -150,7 +152,7 @@ if __name__ == '__main__':
     plot_cdf(all_cdf, 'follower', 5, axes[3], '(d)')
 
     fig.legend(lines, labels=num2exp.values(), loc='upper center', ncol=len(num2exp), frameon=False, fontsize='small')
-    lattput.plot_lattput(protocol, axes[0], '(a)')
+    lattput.plot_lattput(protocol, [3, 5], axes[0], '(a)')
 
     plt.subplots_adjust(wspace=0.32)
     

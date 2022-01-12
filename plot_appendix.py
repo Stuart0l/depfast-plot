@@ -15,7 +15,7 @@ num2exp = {
     # 3: 'Disk Slowness',
     # 4: 'Disk Contention',
     5: 'Network Slowness',
-    6: 'Memory Contention'
+    6: 'memory Contention'
 }
 
 exp2num = {
@@ -25,7 +25,7 @@ exp2num = {
     'Disk Slowness': 3,
     'Disk Contention': 4,
     'Network Slowness': 5,
-    'Memory Contention': 6
+    'memory Contention': 6
 }
 
 metrics = [
@@ -77,7 +77,7 @@ def plot_figure(all_data, metric, ax, plt_id):
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_box_aspect(0.6)
-    ax.set_title('{} Throughput with slowness'.format(plt_id), y=-0.45, fontsize=18, fontweight='bold')
+    ax.set_title('{} Throughput with slowness'.format(plt_id), y=-0.35, fontsize=18, fontweight='bold')
 
     return lines
 
@@ -114,11 +114,11 @@ def plot_cdf(all_cdf, ty, rep, ax, plt_id):
 
     ax.set_ylabel('CDF')
     ax.set_ylim([0, 1])
-    ax.set_xlim([0, 10] if ty == 'leader' else 0)
+    ax.set_xlim([0, 15])
     ax.set_xlabel('Latency (ms)')
     # ax.set_xscale('log')
     ax.set_box_aspect(0.6)
-    ax.set_title('{} CDF ({} slow)'.format(plt_id, ty), y=-0.45, fontsize=18, fontweight='bold')
+    ax.set_title('{} CDF ({} slow)'.format(plt_id, ty), y=-0.35, fontsize=18, fontweight='bold')
 
 
 if __name__ == '__main__':
@@ -140,17 +140,15 @@ if __name__ == '__main__':
                 cdf = get_cdf_data(protocol, t, exp2num[e], r)
                 all_cdf[t][r][e] = cdf
 
-    print(all_data)
-    plt.rcParams['font.size'] = 18
-    plt.rcParams['font.family'] = 'serif'
-    fig, axes = plt.subplots(1, 4, figsize=(25,4))
+    plt.rc('font', size=18)
+    fig, axes = plt.subplots(1, 3, figsize=(25,5))
     
-    lines = plot_figure(all_data, 0, axes[1], '(b)')
-    plot_cdf(all_cdf, 'follower', 5, axes[2], '(c)')
-    plot_cdf(all_cdf, 'leader', 5, axes[3], '(d)')
+    lines = plot_figure(all_data, 0, axes[0], '(a)')
+    plot_cdf(all_cdf, 'follower', 5, axes[1], '(b)')
+    plot_cdf(all_cdf, 'leader', 5, axes[2], '(c)')
 
     fig.legend(lines, labels=num2exp.values(), loc='upper center', ncol=len(num2exp), frameon=False)
-    lattput.plot_lattput(protocol, [5], axes[0], '(a)')
+    # lattput.plot_lattput(protocol, axes[0], '(a)')
 
     plt.subplots_adjust(wspace=0.32)
     
