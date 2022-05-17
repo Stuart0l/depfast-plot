@@ -67,7 +67,7 @@ def plot_figure(all_data, metric, ax, plt_id):
     for n, e in num2exp.items():
         try:
             # slow_res = [all_data['follower'][r][e][metric] for r in reps]
-            slow_res = [all_data[t][5][e][metric] for t in typs]
+            slow_res = [all_data[t][3][e][metric] for t in typs]
             lines.append(ax.bar(x + i*width, slow_res, width, label=e))
             i += 1
         except:
@@ -146,14 +146,14 @@ if __name__ == '__main__':
     fig, axes = plt.subplots(1, 4, figsize=(25,4))
     
     lines = plot_figure(all_data, 0, axes[1], '(b)')
-    plot_cdf(all_cdf, 'follower', 5, axes[2], '(c)')
-    plot_cdf(all_cdf, 'leader', 5, axes[3], '(d)')
+    plot_cdf(all_cdf, 'follower', 3, axes[2], '(c)')
+    plot_cdf(all_cdf, 'leader', 3, axes[3], '(d)')
 
     fig.legend(lines, labels=num2exp.values(), loc='upper center', ncol=len(num2exp), frameon=False)
-    lattput.plot_lattput(protocol, [5], axes[0], '(a)')
+    lattput.plot_lattput(protocol, [3], axes[0], '(a)')
 
     plt.subplots_adjust(wspace=0.32)
     
     
     # plt.show()
-    fig.savefig(os.path.join(home, 'ATC-22/imgs', 'depfast_{}_5rep.pdf'.format(protocol)), bbox_inches='tight')
+    fig.savefig(os.path.join(home, 'ATC-22/imgs', 'depfast_{}.pdf'.format(protocol)), bbox_inches='tight')

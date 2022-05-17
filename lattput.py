@@ -72,7 +72,8 @@ def plot_lattput(proto, rep, ax, plt_id):
 		for r in rep:
 			lat, tput = getdata(p, r)
 
-			ax.plot(tput, lat, marker[p], label='{} {}-rep'.format(real_name[p], r), linewidth=3, ms=8, markeredgewidth=3)
+			ax.plot(tput, lat, marker[p], label='{} {}-rep'.format(real_name[p], r),
+					linewidth=3, ms=6 if p == 'etcd' else 8, markeredgewidth=3)
 			try:
 
 				x = tput[annotate[p]]
